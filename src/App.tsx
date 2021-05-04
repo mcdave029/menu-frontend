@@ -52,7 +52,10 @@ class App extends Component<Props, State> {
         loading: true,
       });
       axios
-        .get("http://127.0.0.1:3000/api/v1/menus/calculate_ids", options)
+        .get(
+          process.env.REACT_APP_API_URL + "/api/v1/menus/calculate_ids",
+          options
+        )
         .then((response) => {
           this.setState({
             alertMsg: response.data.message,
