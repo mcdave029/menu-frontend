@@ -1,0 +1,40 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+on: [push]
+
+jobs:
+  stable:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node_version: [14]
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node_version }}
+        uses: actions/setup-node@v2.1.5
+        with:
+          node_version: ${{ matrix.node_version }}
+
+      - name: Installation ⚙️
+        run: yarn install
+
+      - name: Linting 🧹
+        run: yarn lint
+
+      - name: Testing 🧪
+        run: yarn test --watchAll=false
+
+      - name: Build 🛠
+        run: yarn build
+        env:
+          REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
+
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@4.1.0
+        with:
+          branch: gh-pages
+          folder: build
